@@ -1,5 +1,5 @@
 __title__ = 'Django SEBS'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'Mattia Procopio'
 __license__ = 'MIT'
-__copyright__ = 'Copyright 2017 Mattia Procopio'
+__copyright__ = 'Copyright 2016-2017 Mattia Procopio'
