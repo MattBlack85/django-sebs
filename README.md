@@ -1,4 +1,4 @@
-# django-sebs
+# django-sebs [![Build Status](https://travis-ci.org/MattBlack85/django-sebs.svg?branch=master)](https://travis-ci.org/MattBlack85/django-sebs)
 Django Simple Email Backend for SES using boto3
 
 ## Why another email backend for amazon SES?
