@@ -12,14 +12,17 @@ class SESEmailBackend(BaseEmailBackend):
     """
 
     def __init__(self, fail_silently=False, **kwargs):
-        super(SESEmailBackend, self).__init__(fail_silently=fail_silently, **kwargs)
+        super(SESEmailBackend, self).__init__(
+            fail_silently=fail_silently, **kwargs)
         self.connection = None
 
     def open(self):
-        self.connection = boto3.client('ses',
-                                       aws_access_key_id=settings.SES_ACCESS_KEY,
-                                       aws_secret_access_key=settings.SES_SECRET_KEY,
-                                       region_name=settings.SES_REGION)
+        self.connection = boto3.client(
+            'ses',
+            aws_access_key_id=settings.SES_ACCESS_KEY,
+            aws_secret_access_key=settings.SES_SECRET_KEY,
+            region_name=settings.SES_REGION
+        )
 
     def close(self):
         self.connection = None
