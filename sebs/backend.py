@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+import logging
+
 import boto3
 import botocore
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
 from django.core.mail.message import sanitize_address
+
+logger = logging.getLogger('sebs')
 
 
 class SESEmailBackend(BaseEmailBackend):
@@ -56,7 +60,8 @@ class SESEmailBackend(BaseEmailBackend):
                                   'Html': {'Data': email_message.body,
                                            'Charset': 'utf-8'}}}
             )
-        except botocore.exceptions.ClientError:
+        except botocore.exceptions.ClientError as exc:
+            logger.warning('An error occured when trying to send the email via SES: %s' % exc.msg)
             if not self.fail_silently:
                 raise
             return False
