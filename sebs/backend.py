@@ -3,6 +3,7 @@ import boto3
 import botocore
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
+from django.core.mail.message import sanitize_address
 
 
 class SESEmailBackend(BaseEmailBackend):
@@ -40,16 +41,19 @@ class SESEmailBackend(BaseEmailBackend):
 
         return num_sent
 
-    def _send(self, message):
+    def _send(self, email_message):
+        encoding = email_message.encoding or settings.DEFAULT_CHARSET
+        from_email = sanitize_address(email_message.from_email, encoding)
+        recipients = [sanitize_address(addr, encoding) for addr in email_message.recipients()]
         try:
             self.connection.send_email(
-                Source=message.from_email,
-                Destination={'ToAddresses': message.to},
-                Message={'Subject': {'Data': message.subject,
+                Source=from_email,
+                Destination={'ToAddresses': recipients},
+                Message={'Subject': {'Data': email_message.subject,
                                      'Charset': 'utf-8'},
-                         'Body': {'Text': {'Data': message.body,
+                         'Body': {'Text': {'Data': email_message.body,
                                            'Charset': 'utf-8'},
-                                  'Html': {'Data': message.body,
+                                  'Html': {'Data': email_message.body,
                                            'Charset': 'utf-8'}}}
             )
         except botocore.exceptions.ClientError:
